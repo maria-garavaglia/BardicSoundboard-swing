@@ -6,7 +6,7 @@ import java.util.Map;
 public class CharacterModel
 {
     private String name;
-    private Map<String, Path> spells;
+    private final Map<String, Path> spells;
 
     public CharacterModel(String name, Map<String, Path> spells)
     {
