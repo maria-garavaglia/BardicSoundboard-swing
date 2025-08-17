@@ -48,17 +48,29 @@ public class MainWindowView extends JFrame
                 .addComponent(editSpellButton)
                 .addComponent(removeSpellButton)
             )
-            .addComponent(spellList, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+            .addComponent(spellList,
+                GroupLayout.PREFERRED_SIZE,
+                GroupLayout.PREFERRED_SIZE,
+                Short.MAX_VALUE
+            )
             .addGroup(
                 layout.createSequentialGroup()
                 .addComponent(nowPlayingLabel)
-                .addComponent(nowPlayingDisplay, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+                .addComponent(nowPlayingDisplay,
+                    GroupLayout.PREFERRED_SIZE,
+                    GroupLayout.PREFERRED_SIZE,
+                    Short.MAX_VALUE
+                )
             )
             .addGroup(
                 layout.createSequentialGroup()
                 .addComponent(playButton)
                 .addComponent(stopButton)
-                .addComponent(volumeSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(volumeSlider,
+                    GroupLayout.PREFERRED_SIZE,
+                    GroupLayout.PREFERRED_SIZE,
+                    GroupLayout.PREFERRED_SIZE
+                )
             )
         );
 
@@ -70,7 +82,11 @@ public class MainWindowView extends JFrame
                 .addComponent(editSpellButton)
                 .addComponent(removeSpellButton)
             )
-            .addComponent(spellList, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+            .addComponent(spellList,
+                GroupLayout.PREFERRED_SIZE,
+                GroupLayout.PREFERRED_SIZE,
+                Short.MAX_VALUE
+            )
             .addGroup(
                 layout.createParallelGroup()
                 .addComponent(nowPlayingLabel)
