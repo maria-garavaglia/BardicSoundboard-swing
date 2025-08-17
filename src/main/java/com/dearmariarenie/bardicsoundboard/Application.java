@@ -19,9 +19,6 @@ public class Application
     @Bean
     ApplicationRunner appRunner(MainWindowView mainWindow)
     {
-        return args -> {
-            mainWindow.pack();
-            mainWindow.setVisible(true);
-        };
+        return args -> mainWindow.showView();
     }
 }
