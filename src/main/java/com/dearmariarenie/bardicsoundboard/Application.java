@@ -1,5 +1,6 @@
 package com.dearmariarenie.bardicsoundboard;
 
+import com.dearmariarenie.bardicsoundboard.ui.MainWindowView;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

@@ -1,4 +1,4 @@
-package com.dearmariarenie.bardicsoundboard;
+package com.dearmariarenie.bardicsoundboard.ui;
 
 import java.awt.Dimension;
 import javax.swing.GroupLayout;

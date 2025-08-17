@@ -1,0 +1,5 @@
+package com.dearmariarenie.bardicsoundboard.models;
+
+public class Character
+{
+}
