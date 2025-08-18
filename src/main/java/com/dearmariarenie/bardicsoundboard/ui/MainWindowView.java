@@ -7,6 +7,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.WindowConstants;
 import org.springframework.stereotype.Component;
@@ -28,10 +32,11 @@ public class MainWindowView extends JFrame
         createUi();
     }
 
-    public void createUi()
+    private void createUi()
     {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(640, 480));
+        setJMenuBar(createMenu());
 
         var nowPlayingLabel = new JLabel("Now Playing:");
 
@@ -99,6 +104,34 @@ public class MainWindowView extends JFrame
                 .addComponent(volumeSlider)
             )
         );
+    }
+
+    private JMenuBar createMenu()
+    {
+        var menuBar = new JMenuBar();
+
+        // file menu
+        var fileMenu = new JMenu("File");
+        var openItem = new JMenuItem("Open...");
+        var saveItem = new JMenuItem("Save");
+        var saveAsItem = new JMenuItem("Save As...");
+        var prefsItem = new JMenuItem("Preferences...");
+
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        fileMenu.add(saveAsItem);
+        fileMenu.add(new JSeparator());
+        fileMenu.add(prefsItem);
+        menuBar.add(fileMenu);
+
+        // help menu
+        var helpMenu = new JMenu("Help");
+        var aboutItem = new JMenuItem("About...");
+
+        helpMenu.add(aboutItem);
+        menuBar.add(helpMenu);
+
+        return menuBar;
     }
 
     public void showView()
