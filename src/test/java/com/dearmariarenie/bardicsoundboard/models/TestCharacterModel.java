@@ -20,7 +20,7 @@ public class TestCharacterModel
             .addSpell(new SpellModel("Fireball", "Fireball.mp3"))
             .addSpell(new SpellModel("Vicious Mockery", "Vicious Mockery.mp3"))
             .addSpell(new SpellModel("Healing Word", "Healing Word.mp3"));
-        expected.save(testOutput.getAbsolutePath());
+        expected.saveAs(testOutput);
 
         var actual = CharacterModel.load(testOutput);
 

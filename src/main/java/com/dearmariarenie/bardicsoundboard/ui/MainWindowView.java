@@ -47,6 +47,7 @@ public class MainWindowView extends JFrame
     private final JMenuItem menuAbout = new JMenuItem("About...");
 
     // main window controls
+    // TODO add character name view/edit
     private final JButton addSpellButton = new JButton("Add Spell");
     private final JButton editSpellButton = new JButton("Edit Spell");
     private final JButton removeSpellButton = new JButton("Remove Spell");

@@ -1,6 +1,7 @@
 package com.dearmariarenie.bardicsoundboard.models;
 
 import com.dearmariarenie.bardicsoundboard.utils.Fmt;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -19,6 +20,8 @@ public class CharacterModel
     private String name = "";
     @JsonProperty
     private List<SpellModel> spells = new ArrayList<>();
+    @JsonIgnore
+    private File saveFile = null;
 
     public CharacterModel()
     {
@@ -95,15 +98,35 @@ public class CharacterModel
         ;
     }
 
-    public void save(String filename) throws IOException
+    public File getSaveFile()
     {
-        // TODO new file creation if needed?
-        new ObjectMapper().writeValue(new File(filename), this);
+        return saveFile;
+    }
+
+    public void save() throws IOException
+    {
+        if (!saveFile.exists())
+        {
+            // TODO use custom exception
+            throw new RuntimeException("No save file exists, use saveAs instead");
+        }
+        logger.info("Saving to {}", saveFile.getAbsolutePath());
+        new ObjectMapper().writeValue(saveFile, this);
+    }
+
+    public void saveAs(File file) throws IOException
+    {
+        logger.info("Saving to {}", file.getAbsolutePath());
+        new ObjectMapper().writeValue(file, this);
+        this.saveFile = file;
     }
 
     public static CharacterModel load(File file) throws IOException
     {
+        logger.info("Loading {}", file);
         var newChar = new ObjectMapper().readValue(file, CharacterModel.class);
+        newChar.saveFile = file;
+
         logger.info(
             "Loaded character {} with {} spells",
             newChar.name,
