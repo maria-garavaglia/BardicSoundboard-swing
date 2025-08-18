@@ -30,7 +30,6 @@ public class MainWindowView extends JFrame
         Load,
         Save,
         SaveAs,
-        OpenPreferences,
         OpenAbout,
         AddSpell,
         EditSpell,
@@ -44,7 +43,6 @@ public class MainWindowView extends JFrame
     private final JMenuItem menuLoad = new JMenuItem("Load...");
     private final JMenuItem menuSave = new JMenuItem("Save");
     private final JMenuItem menuSaveAs = new JMenuItem("Save As...");
-    private final JMenuItem menuPrefs = new JMenuItem("Preferences...");
     private final JMenuItem menuAbout = new JMenuItem("About...");
 
     // main window controls
@@ -148,8 +146,6 @@ public class MainWindowView extends JFrame
         fileMenu.add(menuLoad);
         fileMenu.add(menuSave);
         fileMenu.add(menuSaveAs);
-        fileMenu.add(new JSeparator());
-        fileMenu.add(menuPrefs);
         menuBar.add(fileMenu);
 
         var helpMenu = new JMenu("Help");
@@ -178,9 +174,6 @@ public class MainWindowView extends JFrame
                 break;
             case SaveAs:
                 menuSaveAs.addActionListener(evt -> callback.run());
-                break;
-            case OpenPreferences:
-                menuPrefs.addActionListener(evt -> callback.run());
                 break;
             case OpenAbout:
                 menuAbout.addActionListener(evt -> callback.run());

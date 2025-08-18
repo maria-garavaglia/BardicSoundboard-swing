@@ -48,7 +48,6 @@ public class MainWindowController
         view.addUserActionListener(UserAction.Load, this::load);
         view.addUserActionListener(UserAction.Save, this::save);
         view.addUserActionListener(UserAction.SaveAs, this::saveAs);
-        view.addUserActionListener(UserAction.OpenPreferences, this::openPreferences);
         view.addUserActionListener(UserAction.OpenAbout, this::openAbout);
         view.addUserActionListener(UserAction.AddSpell, this::addSpell);
         view.addUserActionListener(UserAction.EditSpell, this::editSpell);
@@ -136,12 +135,6 @@ public class MainWindowController
                 );
             }
         }
-    }
-
-    private void openPreferences()
-    {
-        logger.info("openPreferences() called");
-        // TODO implement
     }
 
     private void openAbout()
