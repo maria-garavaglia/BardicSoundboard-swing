@@ -30,7 +30,6 @@ public class MainWindowView extends JFrame
         Load,
         Save,
         SaveAs,
-        OpenAbout,
         AddSpell,
         EditSpell,
         RemoveSpell,
@@ -43,7 +42,6 @@ public class MainWindowView extends JFrame
     private final JMenuItem menuLoad = new JMenuItem("Load...");
     private final JMenuItem menuSave = new JMenuItem("Save");
     private final JMenuItem menuSaveAs = new JMenuItem("Save As...");
-    private final JMenuItem menuAbout = new JMenuItem("About...");
 
     // main window controls
     // TODO add character name view/edit
@@ -148,10 +146,6 @@ public class MainWindowView extends JFrame
         fileMenu.add(menuSaveAs);
         menuBar.add(fileMenu);
 
-        var helpMenu = new JMenu("Help");
-        helpMenu.add(menuAbout);
-        menuBar.add(helpMenu);
-
         return menuBar;
     }
 
@@ -174,9 +168,6 @@ public class MainWindowView extends JFrame
                 break;
             case SaveAs:
                 menuSaveAs.addActionListener(evt -> callback.run());
-                break;
-            case OpenAbout:
-                menuAbout.addActionListener(evt -> callback.run());
                 break;
             case AddSpell:
                 addSpellButton.addActionListener(evt -> callback.run());

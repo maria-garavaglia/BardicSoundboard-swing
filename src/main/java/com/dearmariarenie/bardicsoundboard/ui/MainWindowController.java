@@ -48,7 +48,6 @@ public class MainWindowController
         view.addUserActionListener(UserAction.Load, this::load);
         view.addUserActionListener(UserAction.Save, this::save);
         view.addUserActionListener(UserAction.SaveAs, this::saveAs);
-        view.addUserActionListener(UserAction.OpenAbout, this::openAbout);
         view.addUserActionListener(UserAction.AddSpell, this::addSpell);
         view.addUserActionListener(UserAction.EditSpell, this::editSpell);
         view.addUserActionListener(UserAction.RemoveSpell, this::removeSpell);
@@ -135,12 +134,6 @@ public class MainWindowController
                 );
             }
         }
-    }
-
-    private void openAbout()
-    {
-        logger.info("openAbout() called");
-        // TODO implement
     }
 
     private void addSpell()
