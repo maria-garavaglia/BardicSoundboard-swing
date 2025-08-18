@@ -51,9 +51,8 @@ public class SpellModel
             return false;
         }
         SpellModel that = (SpellModel)o;
-        return Objects.equals(name, that.name)
-            && Objects.equals(file, that.file)
-        ;
+        return Objects.equals(name, that.name);
+        // Don't really need to compare file names
     }
 
     @Override

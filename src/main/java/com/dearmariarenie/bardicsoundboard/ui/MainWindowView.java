@@ -48,7 +48,7 @@ public class MainWindowView extends JFrame
     private final JButton addSpellButton = new JButton("Add Spell");
     private final JButton editSpellButton = new JButton("Edit Spell");
     private final JButton removeSpellButton = new JButton("Remove Spell");
-    private final JList<String> spellList = new JList<>();
+    private final JList<SpellModel> spellList = new JList<>();
     private final JLabel nowPlayingDisplay = new JLabel();
     private final JButton playButton = new JButton("Play");
     private final JButton stopButton = new JButton("Stop");
@@ -69,6 +69,8 @@ public class MainWindowView extends JFrame
         setJMenuBar(createMenu());
 
         var nowPlayingLabel = new JLabel("Now Playing:");
+
+        spellList.setCellRenderer(new SpellListRenderer());
 
         var layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,14 +212,12 @@ public class MainWindowView extends JFrame
         SwingUtilities.invokeLater(() -> {
             setTitle(Fmt.format("Bardic Soundboard -- {}", character.getName()));
             spellList.setListData(
-                character.getSpells().stream()
-                    .map(SpellModel::getName)
-                    .toArray(String[]::new)
+                character.getSpells().toArray(SpellModel[]::new)
             );
         });
     }
 
-    public String getSelectedSpell()
+    public SpellModel getSelectedSpell()
     {
         return spellList.getSelectedValue();
     }

@@ -148,13 +148,12 @@ public class MainWindowController
 
     private void editSpell()
     {
-        var spellName = view.getSelectedSpell();
-        if (spellName == null)
+        var toEdit = view.getSelectedSpell();
+        if (toEdit == null)
         {
             // nothing selected
             return;
         }
-        var toEdit = characterModel.findSpell(view.getSelectedSpell()).orElseThrow();
 
         var spellView = new SpellView(view, toEdit);
         spellView.addConfirmCallback(() -> {
@@ -166,8 +165,8 @@ public class MainWindowController
 
     private void removeSpell()
     {
-        var spellName = view.getSelectedSpell();
-        if (spellName == null)
+        var toRemove = view.getSelectedSpell();
+        if (toRemove == null)
         {
             // nothing selected
             return;
@@ -176,21 +175,20 @@ public class MainWindowController
         var result = JOptionPane.showConfirmDialog(view, "Are you sure you want to delete this spell?");
         if (result == JOptionPane.OK_OPTION)
         {
-            characterModel.removeSpell(spellName);
+            characterModel.removeSpell(toRemove);
             view.updateFromCharacter(characterModel);
         }
     }
 
     private void play()
     {
-        var spellName = view.getSelectedSpell();
-        if (spellName == null)
+        var spell = view.getSelectedSpell();
+        if (spell == null)
         {
             // nothing selected
             return;
         }
 
-        var spell = characterModel.findSpell(view.getSelectedSpell()).orElseThrow();
         var file = new File(spell.getFile());
 
         logger.info("Playing audio for {}: {}", spell.getName(), file.toURI());

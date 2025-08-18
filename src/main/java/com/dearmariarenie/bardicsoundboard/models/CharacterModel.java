@@ -86,9 +86,9 @@ public class CharacterModel
         return this;
     }
 
-    public CharacterModel removeSpell(String spellName)
+    public CharacterModel removeSpell(SpellModel toRemove)
     {
-        spells.removeIf(spell -> spell.getName().equals(spellName));
+        spells.removeIf(spell -> spell.equals(toRemove));
         return this;
     }
 
