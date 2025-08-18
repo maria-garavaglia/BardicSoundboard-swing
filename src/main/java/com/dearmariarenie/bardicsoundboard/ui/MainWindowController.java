@@ -6,6 +6,11 @@ import com.dearmariarenie.bardicsoundboard.ui.MainWindowView.UserAction;
 import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+import javafx.application.Platform;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
+import javafx.scene.media.MediaPlayer;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -22,11 +27,15 @@ public class MainWindowController
     private CharacterModel characterModel = new CharacterModel();
 
     private final JFileChooser fileChooser = new JFileChooser();
+    private MediaPlayer audioPlayer;
 
     public MainWindowController()
     {
         fileChooser.setCurrentDirectory(new File("."));
         fileChooser.setFileFilter(new FileNameExtensionFilter("JSON Files", "json"));
+
+        // Start the JavaFX thread so audio can work
+        Platform.startup(() -> {});
     }
 
     public void setView(MainWindowView view)
@@ -175,19 +184,61 @@ public class MainWindowController
 
     private void play()
     {
-        logger.info("play() called");
-        // TODO implement
+        var spellName = view.getSelectedSpell();
+        if (spellName == null)
+        {
+            // nothing selected
+            return;
+        }
+        
+        var spell = characterModel.findSpell(view.getSelectedSpell()).orElseThrow();
+        var file = new File(Paths.get("Audio", spell.getFile()).toString());
+
+        logger.info("Playing audio for {}: {}", spell.getName(), file.toURI().toString());
+        try
+        {
+            Media media = new Media(file.toURI().toString());
+
+            if(audioPlayer != null && audioPlayer.getStatus() == MediaPlayer.Status.PLAYING)
+            {
+                audioPlayer.stop();
+            }
+
+            audioPlayer = new MediaPlayer(media);
+            audioPlayer.setOnError(() ->
+            {
+                throw audioPlayer.getError();
+            });
+
+            audioPlayer.setVolume(view.getVolume() / 100.0);
+            audioPlayer.play();
+            view.setNowPlaying(spell.getName());
+        }
+        catch(MediaException e)
+        {
+            logger.error("Could not play audio file {}", file.getName(), e);
+            JOptionPane.showMessageDialog(
+                view,
+                Fmt.format("Could not play audio for {}. Check the logs for more information.", spell.getName()),
+                "Play failed",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 
     private void stop()
     {
-        logger.info("stop() called");
-        // TODO implement
+        if(audioPlayer != null && audioPlayer.getStatus() == MediaPlayer.Status.PLAYING)
+        {
+            audioPlayer.stop();
+        }
     }
 
     private void setVolume()
     {
-        logger.info("setVolume() called");
-        // TODO implement
+        if(audioPlayer != null)
+        {
+            audioPlayer.setVolume(view.getVolume() / 100.0);
+        }
     }
 }
