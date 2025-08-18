@@ -166,8 +166,7 @@ public class MainWindowController
 
     private void addSpell()
     {
-        logger.info("addSpell() called");
-        // TODO implement
+        new AddSpellView(view).showView();
     }
 
     private void editSpell()
@@ -190,7 +189,7 @@ public class MainWindowController
             // nothing selected
             return;
         }
-        
+
         var spell = characterModel.findSpell(view.getSelectedSpell()).orElseThrow();
         var file = new File(Paths.get("Audio", spell.getFile()).toString());
 
