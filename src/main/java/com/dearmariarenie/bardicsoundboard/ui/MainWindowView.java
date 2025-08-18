@@ -1,5 +1,7 @@
 package com.dearmariarenie.bardicsoundboard.ui;
 
+import com.dearmariarenie.bardicsoundboard.models.CharacterModel;
+import com.dearmariarenie.bardicsoundboard.models.SpellModel;
 import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -223,16 +225,16 @@ public class MainWindowView extends JFrame
         }
     }
 
-    public void setCharName(String name)
+    public void updateFromCharacter(CharacterModel character)
     {
-        SwingUtilities.invokeLater(() -> setTitle(Fmt.format("Bardic Soundboard -- {}", name)));
-    }
-
-    public void setSpellList(List<String> spells)
-    {
-        SwingUtilities.invokeLater(
-            () -> spellList.setListData(spells.toArray(new String[0]))
-        );
+        SwingUtilities.invokeLater(() -> {
+            setTitle(Fmt.format("Bardic Soundboard -- {}", character.getName()));
+            spellList.setListData(
+                character.getSpells().stream()
+                    .map(SpellModel::getName)
+                    .toArray(String[]::new)
+            );
+        });
     }
 
     public String getSelectedSpell()

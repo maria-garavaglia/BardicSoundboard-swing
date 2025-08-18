@@ -4,6 +4,7 @@ import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class CharacterModel
 
     public CharacterModel addSpell(SpellModel newSpell)
     {
+        logger.info("Adding spell: {} -> {}", newSpell.getName(), newSpell.getFile());
         // check if spell with the same name already exists
         if (spells.stream()
             .map(SpellModel::getName)
@@ -111,13 +113,19 @@ public class CharacterModel
             throw new RuntimeException("No save file exists, use saveAs instead");
         }
         logger.info("Saving to {}", saveFile.getAbsolutePath());
-        new ObjectMapper().writeValue(saveFile, this);
+        new ObjectMapper()
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            .writeValue(saveFile, this)
+        ;
     }
 
     public void saveAs(File file) throws IOException
     {
         logger.info("Saving to {}", file.getAbsolutePath());
-        new ObjectMapper().writeValue(file, this);
+        new ObjectMapper()
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            .writeValue(file, this)
+        ;
         this.saveFile = file;
     }
 

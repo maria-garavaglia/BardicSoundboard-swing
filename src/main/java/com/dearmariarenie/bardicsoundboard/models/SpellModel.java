@@ -18,6 +18,7 @@ public class SpellModel
     public SpellModel(String name, String file)
     {
         this.name = name;
+        this.file = file;
     }
 
     public String getName()

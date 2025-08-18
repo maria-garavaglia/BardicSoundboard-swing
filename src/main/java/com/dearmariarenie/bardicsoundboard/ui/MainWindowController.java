@@ -84,13 +84,7 @@ public class MainWindowController
                     JOptionPane.ERROR_MESSAGE
                 );
             }
-
-            view.setCharName(characterModel.getName());
-            view.setSpellList(
-                characterModel.getSpells().stream()
-                    .map(SpellModel::getName)
-                    .toList()
-            );
+            view.updateFromCharacter(characterModel);
         }
 
     }
@@ -142,13 +136,6 @@ public class MainWindowController
                     JOptionPane.ERROR_MESSAGE
                 );
             }
-
-            view.setCharName(characterModel.getName());
-            view.setSpellList(
-                characterModel.getSpells().stream()
-                    .map(SpellModel::getName)
-                    .toList()
-            );
         }
     }
 
@@ -166,7 +153,12 @@ public class MainWindowController
 
     private void addSpell()
     {
-        new AddSpellView(view).showView();
+        var spellView = new AddSpellView(view);
+        spellView.addConfirmCallback(() -> {
+            characterModel.addSpell(new SpellModel(spellView.getSpellName(), spellView.getFileName()));
+            view.updateFromCharacter(characterModel);
+        });
+        spellView.showView();
     }
 
     private void editSpell()
@@ -191,7 +183,7 @@ public class MainWindowController
         }
 
         var spell = characterModel.findSpell(view.getSelectedSpell()).orElseThrow();
-        var file = new File(Paths.get("Audio", spell.getFile()).toString());
+        var file = new File(spell.getFile());
 
         logger.info("Playing audio for {}: {}", spell.getName(), file.toURI().toString());
         try
