@@ -1,6 +1,7 @@
 package com.dearmariarenie.bardicsoundboard;
 
 import com.dearmariarenie.bardicsoundboard.ui.MainWindowView;
+import com.formdev.flatlaf.FlatLightLaf;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -15,6 +16,10 @@ public class Application
 {
     public static void main(String[] args)
     {
+        // init FlatLaf
+        // TODO allow for more flexible skinning
+        FlatLightLaf.setup();
+
         // Spring typically starts headless, need to explicitly turn that off
         // so Swing can run
         new SpringApplicationBuilder(Application.class)
