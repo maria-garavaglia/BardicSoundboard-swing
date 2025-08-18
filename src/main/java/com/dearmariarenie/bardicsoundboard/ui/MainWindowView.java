@@ -6,7 +6,6 @@ import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -59,14 +58,11 @@ public class MainWindowView extends JFrame
     private final JButton stopButton = new JButton("Stop");
     private final JSlider volumeSlider = new JSlider();
 
-    private MainWindowController controller;
-
     @Autowired
     public MainWindowView(MainWindowController controller)
     {
         createUi();
-        this.controller = controller;
-        this.controller.setView(this);
+        controller.setView(this);
     }
 
     private void createUi()

@@ -207,7 +207,7 @@ public class MainWindowController
         var spell = characterModel.findSpell(view.getSelectedSpell()).orElseThrow();
         var file = new File(spell.getFile());
 
-        logger.info("Playing audio for {}: {}", spell.getName(), file.toURI().toString());
+        logger.info("Playing audio for {}: {}", spell.getName(), file.toURI());
         try
         {
             Media media = new Media(file.toURI().toString());

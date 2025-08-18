@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 
 /**
  * UI to allow adding/editing spells.
- *
+ * <p>
  * Note: this view doesn't have a dedicated controller, due to its simplicity.
  * The parent view's controller should be able to handle any necessary actions.
  */
