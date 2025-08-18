@@ -18,6 +18,7 @@ import javax.swing.JSeparator;
 import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,7 +26,7 @@ public class MainWindowView extends JFrame
 {
     public enum UserAction
     {
-        Open,
+        Load,
         Save,
         SaveAs,
         OpenPreferences,
@@ -39,7 +40,7 @@ public class MainWindowView extends JFrame
     }
 
     // menu items (as members to allow setting up actions)
-    private final JMenuItem menuOpen = new JMenuItem("Open...");
+    private final JMenuItem menuLoad = new JMenuItem("Load...");
     private final JMenuItem menuSave = new JMenuItem("Save");
     private final JMenuItem menuSaveAs = new JMenuItem("Save As...");
     private final JMenuItem menuPrefs = new JMenuItem("Preferences...");
@@ -55,9 +56,14 @@ public class MainWindowView extends JFrame
     private final JButton stopButton = new JButton("Stop");
     private final JSlider volumeSlider = new JSlider();
 
-    public MainWindowView()
+    private MainWindowController controller;
+
+    @Autowired
+    public MainWindowView(MainWindowController controller)
     {
         createUi();
+        this.controller = controller;
+        this.controller.setView(this);
     }
 
     private void createUi()
@@ -139,7 +145,7 @@ public class MainWindowView extends JFrame
         var menuBar = new JMenuBar();
 
         var fileMenu = new JMenu("File");
-        fileMenu.add(menuOpen);
+        fileMenu.add(menuLoad);
         fileMenu.add(menuSave);
         fileMenu.add(menuSaveAs);
         fileMenu.add(new JSeparator());
@@ -163,8 +169,8 @@ public class MainWindowView extends JFrame
     {
         switch(action)
         {
-            case Open:
-                menuOpen.addActionListener(evt -> callback.run());
+            case Load:
+                menuLoad.addActionListener(evt -> callback.run());
                 break;
             case Save:
                 menuSave.addActionListener(evt -> callback.run());
