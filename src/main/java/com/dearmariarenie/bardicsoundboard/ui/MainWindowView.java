@@ -1,6 +1,10 @@
 package com.dearmariarenie.bardicsoundboard.ui;
 
+import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -12,12 +16,36 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MainWindowView extends JFrame
 {
+    public enum UserAction
+    {
+        Open,
+        Save,
+        SaveAs,
+        OpenPreferences,
+        OpenAbout,
+        AddSpell,
+        EditSpell,
+        RemoveSpell,
+        Play,
+        Stop,
+        SetVolume
+    }
+
+    // menu items (as members to allow setting up actions)
+    private final JMenuItem menuOpen = new JMenuItem("Open...");
+    private final JMenuItem menuSave = new JMenuItem("Save");
+    private final JMenuItem menuSaveAs = new JMenuItem("Save As...");
+    private final JMenuItem menuPrefs = new JMenuItem("Preferences...");
+    private final JMenuItem menuAbout = new JMenuItem("About...");
+
+    // main window controls
     private final JButton addSpellButton = new JButton("Add Spell");
     private final JButton editSpellButton = new JButton("Edit Spell");
     private final JButton removeSpellButton = new JButton("Remove Spell");
@@ -110,25 +138,16 @@ public class MainWindowView extends JFrame
     {
         var menuBar = new JMenuBar();
 
-        // file menu
         var fileMenu = new JMenu("File");
-        var openItem = new JMenuItem("Open...");
-        var saveItem = new JMenuItem("Save");
-        var saveAsItem = new JMenuItem("Save As...");
-        var prefsItem = new JMenuItem("Preferences...");
-
-        fileMenu.add(openItem);
-        fileMenu.add(saveItem);
-        fileMenu.add(saveAsItem);
+        fileMenu.add(menuOpen);
+        fileMenu.add(menuSave);
+        fileMenu.add(menuSaveAs);
         fileMenu.add(new JSeparator());
-        fileMenu.add(prefsItem);
+        fileMenu.add(menuPrefs);
         menuBar.add(fileMenu);
 
-        // help menu
         var helpMenu = new JMenu("Help");
-        var aboutItem = new JMenuItem("About...");
-
-        helpMenu.add(aboutItem);
+        helpMenu.add(menuAbout);
         menuBar.add(helpMenu);
 
         return menuBar;
@@ -138,5 +157,84 @@ public class MainWindowView extends JFrame
     {
         pack();
         setVisible(true);
+    }
+
+    public void addUserActionListener(UserAction action, Runnable callback)
+    {
+        switch(action)
+        {
+            case Open:
+                menuOpen.addActionListener(evt -> callback.run());
+                break;
+            case Save:
+                menuSave.addActionListener(evt -> callback.run());
+                break;
+            case SaveAs:
+                menuSaveAs.addActionListener(evt -> callback.run());
+                break;
+            case OpenPreferences:
+                menuPrefs.addActionListener(evt -> callback.run());
+                break;
+            case OpenAbout:
+                menuAbout.addActionListener(evt -> callback.run());
+                break;
+            case AddSpell:
+                addSpellButton.addActionListener(evt -> callback.run());
+                break;
+            case EditSpell:
+                editSpellButton.addActionListener(evt -> callback.run());
+                break;
+            case RemoveSpell:
+                removeSpellButton.addActionListener(evt -> callback.run());
+                break;
+            case Play:
+                playButton.addActionListener(evt -> callback.run());
+                // also play on spell double click
+                spellList.addMouseListener(new MouseAdapter()
+                {
+                    public void mouseClicked(MouseEvent evt)
+                    {
+                        if (evt.getClickCount() == 2)
+                        {
+                            callback.run();
+                        }
+                    }
+                });
+                break;
+            case Stop:
+                stopButton.addActionListener(evt -> callback.run());
+                break;
+            case SetVolume:
+                volumeSlider.addChangeListener(evt -> callback.run());
+                break;
+            default:
+                throw new RuntimeException(
+                    Fmt.format("Unhandled action {}", action)
+                );
+        }
+    }
+
+    public void setSpellList(List<String> spells)
+    {
+        SwingUtilities.invokeLater(
+            () -> spellList.setListData(spells.toArray(new String[0]))
+        );
+    }
+
+    public String getSelectedSpell()
+    {
+        return spellList.getSelectedValue();
+    }
+
+    public void setNowPlaying(String playing)
+    {
+        SwingUtilities.invokeLater(
+            () -> nowPlayingDisplay.setText(playing)
+        );
+    }
+
+    public int getVolume()
+    {
+        return volumeSlider.getValue();
     }
 }
