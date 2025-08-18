@@ -180,8 +180,19 @@ public class MainWindowController
 
     private void removeSpell()
     {
-        logger.info("removeSpell() called");
-        // TODO implement
+        var spellName = view.getSelectedSpell();
+        if (spellName == null)
+        {
+            // nothing selected
+            return;
+        }
+
+        var result = JOptionPane.showConfirmDialog(view, "Are you sure you want to delete this spell?");
+        if (result == JOptionPane.OK_OPTION)
+        {
+            characterModel.removeSpell(spellName);
+            view.updateFromCharacter(characterModel);
+        }
     }
 
     private void play()
