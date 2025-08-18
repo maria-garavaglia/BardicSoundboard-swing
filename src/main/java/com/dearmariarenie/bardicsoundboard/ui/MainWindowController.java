@@ -1,6 +1,7 @@
 package com.dearmariarenie.bardicsoundboard.ui;
 
 import com.dearmariarenie.bardicsoundboard.models.CharacterModel;
+import com.dearmariarenie.bardicsoundboard.models.SpellModel;
 import com.dearmariarenie.bardicsoundboard.ui.MainWindowView.UserAction;
 import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import java.io.IOException;
@@ -69,6 +70,13 @@ public class MainWindowController
                     JOptionPane.ERROR_MESSAGE
                 );
             }
+
+            view.setCharName(model.getName());
+            view.setSpellList(
+                model.getSpells().stream()
+                    .map(SpellModel::getName)
+                    .toList()
+            );
         }
 
     }

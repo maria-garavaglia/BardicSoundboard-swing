@@ -68,6 +68,7 @@ public class MainWindowView extends JFrame
 
     private void createUi()
     {
+        setTitle("Bardic Soundboard");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(640, 480));
         setJMenuBar(createMenu());
@@ -167,6 +168,7 @@ public class MainWindowView extends JFrame
 
     public void addUserActionListener(UserAction action, Runnable callback)
     {
+        // TODO keyboard shortcuts
         switch(action)
         {
             case Load:
@@ -218,6 +220,11 @@ public class MainWindowView extends JFrame
                     Fmt.format("Unhandled action {}", action)
                 );
         }
+    }
+
+    public void setCharName(String name)
+    {
+        SwingUtilities.invokeLater(() -> setTitle(Fmt.format("Bardic Soundboard -- {}", name)));
     }
 
     public void setSpellList(List<String> spells)
