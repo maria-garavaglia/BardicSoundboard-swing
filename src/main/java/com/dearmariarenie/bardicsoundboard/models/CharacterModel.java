@@ -1,5 +1,6 @@
 package com.dearmariarenie.bardicsoundboard.models;
 
+import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -29,10 +30,8 @@ public class CharacterModel
         if (spells.containsKey(spellName))
         {
             // TODO custom exceptions?
-            // TODO ask Alex if he can send me the PsimFmt snippet so I can use
-            //  {} in strings
             throw new RuntimeException(
-                "Spell '" + spellName + "' already exists"
+                Fmt.format("Spell '{}' already exists", spellName)
             );
         }
 
@@ -63,7 +62,7 @@ public class CharacterModel
         if (!spells.containsKey(spellName))
         {
             throw new RuntimeException(
-                "Spell '" + spellName + "' not found"
+                Fmt.format("Spell '{}' not found", spellName)
             );
         }
         return spells.get(spellName);
