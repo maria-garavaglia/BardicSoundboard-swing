@@ -17,12 +17,12 @@ public class TestCharacterModel
         testOutput.createNewFile();
         var expected = new CharacterModel()
             .setName("TestChar")
-            .addSpell("Fireball", "Fireball.mp3")
-            .addSpell("Vicious Mockery", "Vicious Mockery.mp3")
-            .addSpell("Healing Word", "Healing Word.mp3");
+            .addSpell(new SpellModel("Fireball", "Fireball.mp3"))
+            .addSpell(new SpellModel("Vicious Mockery", "Vicious Mockery.mp3"))
+            .addSpell(new SpellModel("Healing Word", "Healing Word.mp3"));
         expected.save(testOutput.getAbsolutePath());
 
-        var actual = CharacterModel.load(testOutput.getAbsolutePath());
+        var actual = CharacterModel.load(testOutput);
 
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getSpells(), actual.getSpells());

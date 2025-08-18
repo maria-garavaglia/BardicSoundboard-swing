@@ -5,16 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CharacterModel
 {
+    private static final Logger logger = LoggerFactory.getLogger(CharacterModel.class);
+
     @JsonProperty("charName")
     private String name = "";
     @JsonProperty
-    private Map<String, String> spells = new HashMap<>();
+    private List<SpellModel> spells = new ArrayList<>();
 
     public CharacterModel()
     {
@@ -25,7 +29,7 @@ public class CharacterModel
         this.name = name;
     }
 
-    public CharacterModel(String name, Map<String, String> spells)
+    public CharacterModel(String name, List<SpellModel> spells)
     {
         this.name = name;
         this.spells = spells;
@@ -42,22 +46,25 @@ public class CharacterModel
         return this;
     }
 
-    public Map<String, String> getSpells()
+    public List<SpellModel> getSpells()
     {
         return spells;
     }
 
-    public CharacterModel addSpell(String spellName, String audioFilename)
+    public CharacterModel addSpell(SpellModel newSpell)
     {
-        if (spells.containsKey(spellName))
-        {
+        // check if spell with the same name already exists
+        if (spells.stream()
+            .map(SpellModel::getName)
+            .anyMatch(s -> s.equals(newSpell.getName()))
+        ){
             // TODO custom exceptions?
             throw new RuntimeException(
-                Fmt.format("Spell '{}' already exists", spellName)
+                Fmt.format("Spell '{}' already exists", newSpell.getName())
             );
         }
 
-        spells.put(spellName, audioFilename);
+        spells.add(newSpell);
         return this;
     }
 
@@ -66,28 +73,26 @@ public class CharacterModel
         String newSpellName,
         String newAudioFilename
     ){
-        // Just remove the old spell entry and add a new one, it's easier than
-        // futzing around with renaming existing entries
-        removeSpell(oldSpellName);
-        addSpell(newSpellName, newAudioFilename);
+        findSpell(oldSpellName).orElseThrow()
+            .setName(newSpellName)
+            .setFile(newAudioFilename)
+        ;
+
         return this;
     }
 
-    public CharacterModel removeSpell(String spellName)
+    public CharacterModel removeSpell(SpellModel toRemove)
     {
-        spells.remove(spellName);
+        spells.remove(toRemove);
         return this;
     }
 
-    public String getSpellAudio(String spellName)
+    public Optional<SpellModel> findSpell(String spellName)
     {
-        if (!spells.containsKey(spellName))
-        {
-            throw new RuntimeException(
-                Fmt.format("Spell '{}' not found", spellName)
-            );
-        }
-        return spells.get(spellName);
+        return spells.stream()
+            .filter(s -> s.getName().equals(spellName))
+            .findFirst()
+        ;
     }
 
     public void save(String filename) throws IOException
@@ -96,11 +101,14 @@ public class CharacterModel
         new ObjectMapper().writeValue(new File(filename), this);
     }
 
-    public static CharacterModel load(String filename) throws IOException
+    public static CharacterModel load(File file) throws IOException
     {
-        return new ObjectMapper().readValue(
-            new File(filename),
-            CharacterModel.class
+        var newChar = new ObjectMapper().readValue(file, CharacterModel.class);
+        logger.info(
+            "Loaded character {} with {} spells",
+            newChar.name,
+            newChar.spells.size()
         );
+        return newChar;
     }
 }

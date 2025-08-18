@@ -1,6 +1,11 @@
 package com.dearmariarenie.bardicsoundboard.ui;
 
+import com.dearmariarenie.bardicsoundboard.models.CharacterModel;
 import com.dearmariarenie.bardicsoundboard.ui.MainWindowView.UserAction;
+import com.dearmariarenie.bardicsoundboard.utils.Fmt;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -11,6 +16,7 @@ public class MainWindowController
     private static final Logger logger = LoggerFactory.getLogger(MainWindowController.class);
 
     private MainWindowView view;
+    private CharacterModel model;
 
     public MainWindowController()
     {
@@ -39,8 +45,32 @@ public class MainWindowController
 
     private void load()
     {
-        logger.info("load() called");
-        // TODO implement
+        var fileChooser = new JFileChooser();
+        var result = fileChooser.showOpenDialog(view);
+        if (result == JFileChooser.APPROVE_OPTION)
+        {
+            var file = fileChooser.getSelectedFile();
+            logger.info("Opening {}", file.getName());
+
+            try
+            {
+                model = CharacterModel.load(file);
+            }
+            catch(IOException e)
+            {
+                logger.error("Failed to load file {}", file.getName(), e);
+                JOptionPane.showMessageDialog(
+                    view,
+                    Fmt.format(
+                        "Failed to load file '{}'. Check the logs for more information.",
+                        file.getName()
+                    ),
+                    "Load Failed",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+
     }
 
     private void save()
