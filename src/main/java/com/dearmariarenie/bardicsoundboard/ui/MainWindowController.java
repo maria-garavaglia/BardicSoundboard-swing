@@ -140,8 +140,10 @@ public class MainWindowController
     {
         var spellView = new SpellView(view);
         spellView.addConfirmCallback(() -> {
-            characterModel.addSpell(new SpellModel(spellView.getSpellName(), spellView.getFileName()));
+            var newSpell = new SpellModel(spellView.getSpellName(), spellView.getFileName());
+            characterModel.addSpell(newSpell);
             view.updateFromCharacter(characterModel);
+            spellView.closeWindow();
         });
         spellView.showView();
     }
@@ -157,8 +159,22 @@ public class MainWindowController
 
         var spellView = new SpellView(view, toEdit);
         spellView.addConfirmCallback(() -> {
-            characterModel.editSpell(toEdit.getName(), spellView.getSpellName(), spellView.getFileName());
-            view.updateFromCharacter(characterModel);
+            try
+            {
+                characterModel.editSpell(toEdit.getName(), spellView.getSpellName(), spellView.getFileName());
+                view.updateFromCharacter(characterModel);
+                spellView.closeWindow();
+            }
+            catch (RuntimeException e)
+            {
+                logger.error("Failed to edit spell", e);
+                JOptionPane.showMessageDialog(
+                    spellView,
+                    "Could not apply changes to spell. Check the logs for more information.",
+                    "Edit failed",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
         });
         spellView.showView();
     }

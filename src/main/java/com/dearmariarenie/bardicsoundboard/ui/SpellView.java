@@ -2,6 +2,8 @@ package com.dearmariarenie.bardicsoundboard.ui;
 
 import com.dearmariarenie.bardicsoundboard.models.SpellModel;
 import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -54,8 +56,17 @@ public class SpellView extends JDialog
                 setFileName(fileChooser.getSelectedFile().getAbsolutePath());
             }
         });
-        okButton.addActionListener(evt -> dispose());
-        cancelButton.addActionListener(evt -> dispose());
+
+        // make sure OK, Cancel, and the X button all close in the same way
+        cancelButton.addActionListener(evt -> closeWindow());
+        addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                closeWindow();
+            }
+        });
 
         var layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,6 +149,12 @@ public class SpellView extends JDialog
     public void setFileName(String file)
     {
         SwingUtilities.invokeLater(() -> fileField.setText(file));
+    }
+
+    public void closeWindow()
+    {
+        setVisible(false);
+        dispose();
     }
 
 }

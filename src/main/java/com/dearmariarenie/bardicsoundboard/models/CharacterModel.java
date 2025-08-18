@@ -59,14 +59,9 @@ public class CharacterModel
     {
         logger.info("Adding spell: {} -> {}", newSpell.getName(), newSpell.getFile());
         // check if spell with the same name already exists
-        if (spells.stream()
-            .map(SpellModel::getName)
-            .anyMatch(s -> s.equals(newSpell.getName()))
-        ){
-            // TODO custom exceptions?
-            throw new RuntimeException(
-                Fmt.format("Spell '{}' already exists", newSpell.getName())
-            );
+        if (findSpell(newSpell.getName()).isPresent())
+        {
+            throw new RuntimeException(Fmt.format("Spell {} already exists", newSpell.getName()));
         }
 
         spells.add(newSpell);
@@ -78,6 +73,12 @@ public class CharacterModel
         String newSpellName,
         String newAudioFilename
     ){
+        // make sure there isn't an existing spell matching the new name
+        if (findSpell(newSpellName).isPresent())
+        {
+            throw new RuntimeException(Fmt.format("Spell {} already exists", newSpellName));
+        }
+
         findSpell(oldSpellName).orElseThrow()
             .setName(newSpellName)
             .setFile(newAudioFilename)
