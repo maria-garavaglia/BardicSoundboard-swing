@@ -6,7 +6,6 @@ import com.dearmariarenie.bardicsoundboard.ui.MainWindowView.UserAction;
 import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
@@ -153,7 +152,7 @@ public class MainWindowController
 
     private void addSpell()
     {
-        var spellView = new AddSpellView(view);
+        var spellView = new SpellView(view);
         spellView.addConfirmCallback(() -> {
             characterModel.addSpell(new SpellModel(spellView.getSpellName(), spellView.getFileName()));
             view.updateFromCharacter(characterModel);
@@ -163,8 +162,20 @@ public class MainWindowController
 
     private void editSpell()
     {
-        logger.info("editSpell() called");
-        // TODO implement
+        var spellName = view.getSelectedSpell();
+        if (spellName == null)
+        {
+            // nothing selected
+            return;
+        }
+        var toEdit = characterModel.findSpell(view.getSelectedSpell()).orElseThrow();
+
+        var spellView = new SpellView(view, toEdit);
+        spellView.addConfirmCallback(() -> {
+            characterModel.editSpell(toEdit.getName(), spellView.getSpellName(), spellView.getFileName());
+            view.updateFromCharacter(characterModel);
+        });
+        spellView.showView();
     }
 
     private void removeSpell()

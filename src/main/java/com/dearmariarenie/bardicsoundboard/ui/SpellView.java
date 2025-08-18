@@ -1,5 +1,6 @@
 package com.dearmariarenie.bardicsoundboard.ui;
 
+import com.dearmariarenie.bardicsoundboard.models.SpellModel;
 import java.awt.Frame;
 import java.io.File;
 import javax.swing.GroupLayout;
@@ -12,12 +13,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 /**
- * UI to allow addition of new spells.
+ * UI to allow adding/editing spells.
  *
  * Note: this view doesn't have a dedicated controller, due to its simplicity.
  * The parent view's controller should be able to handle any necessary actions.
  */
-public class AddSpellView extends JDialog
+public class SpellView extends JDialog
 {
     private final JTextField nameField = new JTextField();
     private final JTextField fileField = new JTextField();
@@ -27,11 +28,18 @@ public class AddSpellView extends JDialog
 
     private final JFileChooser fileChooser = new JFileChooser();
 
-    public AddSpellView(Frame owner)
+    public SpellView(Frame owner)
     {
         super(owner, "Add New Spell", true);
         createUi();
         fileChooser.setCurrentDirectory(new File("Audio"));
+    }
+
+    public SpellView(Frame owner, SpellModel currentSpell)
+    {
+        this(owner);
+        setSpellName(currentSpell.getName());
+        setFileName(currentSpell.getFile());
     }
 
     private void createUi()
