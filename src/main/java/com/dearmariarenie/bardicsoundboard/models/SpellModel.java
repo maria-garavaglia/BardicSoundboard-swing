@@ -3,6 +3,9 @@ package com.dearmariarenie.bardicsoundboard.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
+/**
+ * Stores information about a character's spell
+ */
 public class SpellModel
 {
     @JsonProperty

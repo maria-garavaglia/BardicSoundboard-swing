@@ -4,6 +4,8 @@ import com.dearmariarenie.bardicsoundboard.models.CharacterModel;
 import com.dearmariarenie.bardicsoundboard.models.SpellModel;
 import com.dearmariarenie.bardicsoundboard.utils.Fmt;
 import java.awt.Dimension;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.GroupLayout;
@@ -15,8 +17,8 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ public class MainWindowView extends JFrame
         Load,
         Save,
         SaveAs,
+        EditName,
         AddSpell,
         EditSpell,
         RemoveSpell,
@@ -44,7 +47,7 @@ public class MainWindowView extends JFrame
     private final JMenuItem menuSaveAs = new JMenuItem("Save As...");
 
     // main window controls
-    // TODO add character name view/edit
+    private final JTextField charNameField = new JTextField();
     private final JButton addSpellButton = new JButton("Add Spell");
     private final JButton editSpellButton = new JButton("Edit Spell");
     private final JButton removeSpellButton = new JButton("Remove Spell");
@@ -68,6 +71,7 @@ public class MainWindowView extends JFrame
         setPreferredSize(new Dimension(640, 480));
         setJMenuBar(createMenu());
 
+        var charNameLabel = new JLabel("Character Name");
         var nowPlayingLabel = new JLabel("Now Playing:");
 
         spellList.setCellRenderer(new SpellListRenderer());
@@ -79,6 +83,11 @@ public class MainWindowView extends JFrame
 
         layout.setHorizontalGroup(
             layout.createParallelGroup()
+            .addGroup(
+                layout.createSequentialGroup()
+                .addComponent(charNameLabel)
+                .addComponent(charNameField)
+            )
             .addGroup(
                 layout.createSequentialGroup()
                 .addComponent(addSpellButton)
@@ -113,6 +122,11 @@ public class MainWindowView extends JFrame
 
         layout.setVerticalGroup(
             layout.createSequentialGroup()
+            .addGroup(
+                layout.createParallelGroup(Alignment.BASELINE)
+                .addComponent(charNameLabel)
+                .addComponent(charNameField)
+            )
             .addGroup(
                 layout.createParallelGroup()
                 .addComponent(addSpellButton)
@@ -171,6 +185,15 @@ public class MainWindowView extends JFrame
             case SaveAs:
                 menuSaveAs.addActionListener(evt -> callback.run());
                 break;
+            case EditName:
+                charNameField.addFocusListener(new FocusAdapter()
+                {
+                    @Override
+                    public void focusLost(FocusEvent e)
+                    {
+                        callback.run();
+                    }
+                });
             case AddSpell:
                 addSpellButton.addActionListener(evt -> callback.run());
                 break;
@@ -211,10 +234,16 @@ public class MainWindowView extends JFrame
     {
         SwingUtilities.invokeLater(() -> {
             setTitle(Fmt.format("Bardic Soundboard -- {}", character.getName()));
+            charNameField.setText(character.getName());
             spellList.setListData(
                 character.getSpells().toArray(SpellModel[]::new)
             );
         });
+    }
+
+    public String getCharName()
+    {
+        return charNameField.getText();
     }
 
     public SpellModel getSelectedSpell()

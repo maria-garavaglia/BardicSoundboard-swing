@@ -7,6 +7,10 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 
+/**
+ * Renderer for a JList of SpellModels. Allows the user to only see the names
+ * of the spells, while the whole objects are stored behind the scenes.
+ */
 public class SpellListRenderer extends JLabel implements ListCellRenderer<SpellModel>
 {
     public SpellListRenderer()
@@ -15,8 +19,13 @@ public class SpellListRenderer extends JLabel implements ListCellRenderer<SpellM
     }
 
     @Override
-    public Component getListCellRendererComponent(JList<? extends SpellModel> list, SpellModel value, int index, boolean isSelected, boolean cellHasFocus)
-    {
+    public Component getListCellRendererComponent(
+        JList<? extends SpellModel> list,
+        SpellModel value,
+        int index,
+        boolean isSelected,
+        boolean cellHasFocus
+    ){
         setText(value.getName());
 
         // TODO not sure if there's more I need to specify to make it match FlatLaf

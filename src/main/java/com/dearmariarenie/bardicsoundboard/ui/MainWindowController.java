@@ -17,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * Manages functionality for the main window view
+ */
 @Component
 public class MainWindowController
 {
@@ -48,6 +51,7 @@ public class MainWindowController
         view.addUserActionListener(UserAction.Load, this::load);
         view.addUserActionListener(UserAction.Save, this::save);
         view.addUserActionListener(UserAction.SaveAs, this::saveAs);
+        view.addUserActionListener(UserAction.EditName, this::updateName);
         view.addUserActionListener(UserAction.AddSpell, this::addSpell);
         view.addUserActionListener(UserAction.EditSpell, this::editSpell);
         view.addUserActionListener(UserAction.RemoveSpell, this::removeSpell);
@@ -56,6 +60,9 @@ public class MainWindowController
         view.addUserActionListener(UserAction.SetVolume, this::setVolume);
     }
 
+    /**
+     * Loads a character from a saved file
+     */
     private void load()
     {
         var result = fileChooser.showOpenDialog(view);
@@ -83,9 +90,12 @@ public class MainWindowController
             }
             view.updateFromCharacter(characterModel);
         }
-
     }
 
+    /**
+     * Saves the current character to a file. Tries to use an existing filename,
+     * if that fails it opens the Save As dialog.
+     */
     private void save()
     {
         try
@@ -113,6 +123,9 @@ public class MainWindowController
         }
     }
 
+    /**
+     * Saves the character to a file, determined by the user via a dialog.
+     */
     private void saveAs()
     {
         var result = fileChooser.showSaveDialog(view);
@@ -134,6 +147,12 @@ public class MainWindowController
                 );
             }
         }
+    }
+
+    private void updateName()
+    {
+        characterModel.setName(view.getCharName());
+        view.updateFromCharacter(characterModel);
     }
 
     private void addSpell()

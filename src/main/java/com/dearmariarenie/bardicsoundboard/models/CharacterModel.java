@@ -13,6 +13,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Stores information about a single character
+ */
 public class CharacterModel
 {
     private static final Logger logger = LoggerFactory.getLogger(CharacterModel.class);
